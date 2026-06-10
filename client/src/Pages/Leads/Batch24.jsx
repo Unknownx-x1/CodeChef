@@ -19,6 +19,14 @@ const getYearLabel = (year) => {
   return `${startYear}-${endYear}`;
 };
 
+const normalizePosition = (value = "") =>
+  value.toLowerCase().replace(/&/g, "and").trim().replace(/\d+$/, "");
+
+const positionMatches = (position, aliases) => {
+  const normalized = normalizePosition(position);
+  return aliases.some((alias) => normalized === alias);
+};
+
 const renderYearTabs = (activeYear, setYear) => (
   <div className="flex items-center justify-center space-x-4">
     {LEAD_YEARS.map((year) => (
@@ -673,20 +681,20 @@ function Batch24() {
               </div>
             </div>
 
-            {/* First Row: Competitive Programming, Web Development, Finance */}
+            {/* First Row: Technical (CP), Web Development, Finance */}
             <div className="flex flex-col md:scale-110 md:py-10 lg:scale-100 lg:flex-row justify-evenly items-center lg:items-end">
-              {/* Competitive Programming */}
+              {/* Technical (CP) */}
               {Object.entries(sanityTeam).filter(([key]) =>
-                key.includes("Competitive Programming")
+                positionMatches(key, ["technical (cp)", "competitive programming"])
               ).length > 0 && (
                 <div className="inline-block items-bottom">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
-                    Competitive Programming
+                    Technical (CP)
                   </h3>
                   <div className="flex flex-wrap justify-center">
                     {Object.entries(sanityTeam)
                       .filter(([key]) =>
-                        key.includes("Competitive Programming")
+                        positionMatches(key, ["technical (cp)", "competitive programming"])
                       )
                       .map(([key, lead]) => (
                         <LeadCard
@@ -703,7 +711,7 @@ function Batch24() {
 
               {/* Web Development */}
               {Object.entries(sanityTeam).filter(([key]) =>
-                key.includes("Web Development")
+                positionMatches(key, ["web development"])
               ).length > 0 && (
                 <div className="inline-block">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
@@ -711,7 +719,9 @@ function Batch24() {
                   </h3>
                   <div className="flex flex-wrap justify-center">
                     {Object.entries(sanityTeam)
-                      .filter(([key]) => key.includes("Web Development"))
+                      .filter(([key]) =>
+                        positionMatches(key, ["web development"])
+                      )
                       .map(([key, lead]) => (
                         <LeadCard
                           key={key}
@@ -807,19 +817,25 @@ function Batch24() {
               {/* Marketing & Sponsorship */}
               {Object.entries(sanityTeam).filter(
                 ([key]) =>
-                  key.includes("Marketing & Sponsorship") ||
-                  key.includes("Outreach & Sponsorship")
+                  positionMatches(key, [
+                    "outreach",
+                    "marketing and sponsorship",
+                    "outreach and sponsorship",
+                  ])
               ).length > 0 && (
                 <div className="inline-block items-bottom">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
-                    Sponsorship & Marketing
+                    Outreach
                   </h3>
                   <div className="flex flex-wrap justify-center">
                     {Object.entries(sanityTeam)
                       .filter(
                         ([key]) =>
-                          key.includes("Marketing & Sponsorship") ||
-                          key.includes("Outreach & Sponsorship")
+                          positionMatches(key, [
+                            "outreach",
+                            "marketing and sponsorship",
+                            "outreach and sponsorship",
+                          ])
                       )
                       .map(([key, lead]) => (
                         <LeadCard
@@ -835,7 +851,7 @@ function Batch24() {
               )}
             </div>
 
-            {/* Third Row: Design and Projects (centered) */}
+            {/* Third Row: Design, Projects, Projects & Web Dev */}
             <div className="flex flex-col md:scale-110 md:py-10 lg:scale-100 lg:flex-row justify-center items-center lg:items-end">
               {/* Design */}
               {Object.entries(sanityTeam).filter(([key]) => key.includes("Design"))
@@ -862,7 +878,7 @@ function Batch24() {
 
               {/* Projects */}
               {Object.entries(sanityTeam).filter(([key]) =>
-                key.includes("Projects")
+                positionMatches(key, ["projects"])
               ).length > 0 && (
                 <div className="inline-block items-bottom mx-4">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
@@ -870,7 +886,7 @@ function Batch24() {
                   </h3>
                   <div className="flex flex-wrap justify-center">
                     {Object.entries(sanityTeam)
-                      .filter(([key]) => key.includes("Projects"))
+                      .filter(([key]) => positionMatches(key, ["projects"]))
                       .map(([key, lead]) => (
                         <LeadCard
                           key={key}
@@ -883,6 +899,33 @@ function Batch24() {
                   </div>
                 </div>
               )}
+
+              {/* Projects & Web Dev */}
+              {Object.entries(sanityTeam).filter(([key]) =>
+                positionMatches(key, ["projects and web dev"])
+              ).length > 0 && (
+                <div className="inline-block items-bottom mx-4">
+                  <h3 className="text-24 text-center font-bold text-gray-700 py-2">
+                    Projects & Web Dev
+                  </h3>
+                  <div className="flex flex-wrap justify-center">
+                    {Object.entries(sanityTeam)
+                      .filter(([key]) =>
+                        positionMatches(key, ["projects and web dev"])
+                      )
+                      .map(([key, lead]) => (
+                        <LeadCard
+                          key={key}
+                          name={lead.name}
+                          image={lead.image}
+                          hashCode={lead.hash}
+                          link={lead.linkedIn}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
+
             </div>
           </>
         ) : (

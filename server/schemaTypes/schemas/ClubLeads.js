@@ -51,14 +51,14 @@ export default {
           {title: 'President', value: 'President'},
           {title: 'Vice President', value: 'Vice President'},
           {title: 'General Secretary', value: 'General Secretary'},
-          {title: 'Web Development', value: 'Web Development'},
-          {title: 'Competitive Programming', value: 'Competitive Programming'},
-          {title: 'Event Management', value: 'Event Management'},
-          {title: 'Finance', value: 'Finance'},
           {title: 'Design', value: 'Design'},
-          {title: 'Marketing & Sponsorship', value: 'Marketing & Sponsorship'},
           {title: 'Social Media & Content', value: 'Social Media & Content'},
-          {title: 'Projects', value: 'Projects'}
+          {title: 'Technical (CP)', value: 'Technical (CP)'},
+          {title: 'Projects', value: 'Projects'},
+          {title: 'Web Development', value: 'Web Development'},
+          {title: 'Projects & Web Dev', value: 'Projects & Web Dev'},
+          {title: 'Outreach', value: 'Outreach'},
+          {title: 'Event Management', value: 'Event Management'}
         ]
       }
     },
