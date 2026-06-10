@@ -8,27 +8,62 @@ import { getAllLeads } from "../../api/apiCall";
 import ErrorBox from "../../Utility/ErrorBox";
 import { FaSpinner } from "react-icons/fa";
 
+const LEAD_YEARS = [23, 24, 25, 26];
+const SANITY_LEAD_START_YEAR = 25;
+
+const getBatchValue = (year) => `20${year}`;
+
+const getYearLabel = (year) => {
+  const startYear = 2000 + year;
+  const endYear = String(year + 1).padStart(2, "0");
+  return `${startYear}-${endYear}`;
+};
+
+const normalizePosition = (value = "") =>
+  value.toLowerCase().replace(/&/g, "and").trim().replace(/\d+$/, "");
+
+const positionMatches = (position, aliases) => {
+  const normalized = normalizePosition(position);
+  return aliases.some((alias) => normalized === alias);
+};
+
+const renderYearTabs = (activeYear, setYear) => (
+  <div className="flex items-center justify-center space-x-4">
+    {LEAD_YEARS.map((year) => (
+      <div
+        key={year}
+        onClick={() => setYear(year)}
+        className={`cursor-pointer hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded ${
+          activeYear === year ? "text-2xl text-[#0DCAF0]" : "text-lg text-gray-500"
+        }`}
+      >
+        {getYearLabel(year)}
+      </div>
+    ))}
+  </div>
+);
+
 function Batch24() {
-  const [year, setYear] = useState(25); //Use this for displaying 2025-2026 leads by default
-  // const [year, setYear] = useState(24); //Use this for displaying 2024-2025 leads
-  const [team25, setTeam25] = useState(null);
+  const [year, setYear] = useState(26); // Use this for displaying 2026-2027 leads by default
+  const [sanityTeam, setSanityTeam] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchTeam25 = async () => {
-      if (year === 25) {
+    const fetchSanityTeam = async () => {
+      if (year >= SANITY_LEAD_START_YEAR) {
         setLoading(true);
+        setError(false);
         try {
           const data = await getAllLeads();
           if (data.error) {
             setError(true);
           } else {
-            // Filter for batch 2025 and transform the data to match our structure
-            const batch25Leads = data.filter((lead) => lead.batch === "2025");
+            const currentBatch = getBatchValue(year);
+            const batchLeads = data.filter((lead) => lead.batch === currentBatch);
             const transformedData = {};
 
-            batch25Leads.forEach((lead) => {
+            batchLeads.forEach((lead) => {
               let positionKey = lead.position;
               // Handle positions that might have multiple people
               if (transformedData[positionKey]) {
@@ -48,7 +83,9 @@ function Batch24() {
               };
             });
 
-            setTeam25(transformedData);
+            setSanityTeam(
+              Object.keys(transformedData).length ? transformedData : null
+            );
           }
         } catch (err) {
           setError(true);
@@ -58,7 +95,7 @@ function Batch24() {
       }
     };
 
-    fetchTeam25();
+    fetchSanityTeam();
   }, [year]);
 
   if (year == 24) {
@@ -74,26 +111,7 @@ function Batch24() {
         <h1 className="text-[64px] text-center font-bold uppercase text-gray-700 pd-8">
           Leads
         </h1>
-        <div className="flex items-center justify-center space-x-4">
-          <div
-            onClick={() => setYear(23)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded cursor-default"
-          >
-            2023-24
-          </div>
-          <div
-            onClick={() => setYear(24)}
-            className="cursor-pointer text-2xl text-[#0DCAF0] hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded cursor-default"
-          >
-            2024-25
-          </div>
-          <div
-            onClick={() => setYear(25)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded cursor-default"
-          >
-            2025-26
-          </div>
-        </div>
+        {renderYearTabs(year, setYear)}
 
         <div className="hidden md:flex md:flex-row justify-center items-center md:items-end">
           <div className="inline-block scale-125 my-10">
@@ -317,26 +335,7 @@ function Batch24() {
         <h1 className="text-[64px] text-center font-bold uppercase text-gray-700 pd-8">
           Leads
         </h1>
-        <div className="flex items-center justify-center space-x-4">
-          <div
-            onClick={() => setYear(23)}
-            className="cursor-pointer text-2xl text-[#0DCAF0] hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded "
-          >
-            2023-24
-          </div>
-          <div
-            onClick={() => setYear(24)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded "
-          >
-            2024-25
-          </div>
-          <div
-            onClick={() => setYear(25)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded "
-          >
-            2025-26
-          </div>
-        </div>
+        {renderYearTabs(year, setYear)}
 
         {/* Left Aligned Cards */}
         {/* <div className="hidden md:flex md:flex-row justify-center items-center md:items-end">
@@ -534,8 +533,7 @@ function Batch24() {
       </div>
     );
   } else {
-    // Batch 25 view
-    // Batch 25 view
+    // Sanity-backed lead years
     return (
       <div
         className="py-16 sm:py-8"
@@ -548,26 +546,7 @@ function Batch24() {
         <h1 className="text-[64px] text-center font-bold uppercase text-gray-700 pd-8">
           Leads
         </h1>
-        <div className="flex items-center justify-center space-x-4">
-          <div
-            onClick={() => setYear(23)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded"
-          >
-            2023-24
-          </div>
-          <div
-            onClick={() => setYear(24)}
-            className="cursor-pointer text-lg text-gray-500 hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded"
-          >
-            2024-25
-          </div>
-          <div
-            onClick={() => setYear(25)}
-            className="cursor-pointer text-2xl text-[#0DCAF0] hover:bg-gray-700 hover:bg-opacity-20 p-1 rounded"
-          >
-            2025-26
-          </div>
-        </div>
+        {renderYearTabs(year, setYear)}
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -577,11 +556,11 @@ function Batch24() {
           <div className="flex justify-center">
             <ErrorBox />
           </div>
-        ) : team25 ? (
+        ) : sanityTeam ? (
           <>
             {/* President, VP, General Secretary */}
             <div className="hidden md:flex md:flex-row justify-center items-center md:items-end">
-              {Object.entries(team25)
+              {Object.entries(sanityTeam)
                 .filter(
                   ([key]) =>
                     key === "Vice President" || key.startsWith("Vice President")
@@ -600,7 +579,7 @@ function Batch24() {
                   </div>
                 ))}
 
-              {Object.entries(team25)
+              {Object.entries(sanityTeam)
                 .filter(
                   ([key]) => key === "President" || key.startsWith("President")
                 )
@@ -618,7 +597,7 @@ function Batch24() {
                   </div>
                 ))}
 
-              {Object.entries(team25)
+              {Object.entries(sanityTeam)
                 .filter(
                   ([key]) =>
                     key === "General Secretary" ||
@@ -641,7 +620,7 @@ function Batch24() {
 
             {/* Mobile view for top positions */}
             <div className="flex flex-col block md:hidden md:flex-row justify-center items-center md:items-end max-[440px]:scale-90">
-              {Object.entries(team25)
+              {Object.entries(sanityTeam)
                 .filter(
                   ([key]) => key === "President" || key.startsWith("President")
                 )
@@ -660,7 +639,7 @@ function Batch24() {
                 ))}
 
               <div className="w-full flex flex-row justify-evenly">
-                {Object.entries(team25)
+                {Object.entries(sanityTeam)
                   .filter(
                     ([key]) =>
                       key === "Vice President" ||
@@ -680,7 +659,7 @@ function Batch24() {
                     </div>
                   ))}
 
-                {Object.entries(team25)
+                {Object.entries(sanityTeam)
                   .filter(
                     ([key]) =>
                       key === "General Secretary" ||
@@ -702,20 +681,20 @@ function Batch24() {
               </div>
             </div>
 
-            {/* First Row: Competitive Programming, Web Development, Finance */}
+            {/* First Row: Technical (CP), Web Development, Finance */}
             <div className="flex flex-col md:scale-110 md:py-10 lg:scale-100 lg:flex-row justify-evenly items-center lg:items-end">
-              {/* Competitive Programming */}
-              {Object.entries(team25).filter(([key]) =>
-                key.includes("Competitive Programming")
+              {/* Technical (CP) */}
+              {Object.entries(sanityTeam).filter(([key]) =>
+                positionMatches(key, ["technical (cp)", "competitive programming"])
               ).length > 0 && (
                 <div className="inline-block items-bottom">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
-                    Competitive Programming
+                    Technical (CP)
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(([key]) =>
-                        key.includes("Competitive Programming")
+                        positionMatches(key, ["technical (cp)", "competitive programming"])
                       )
                       .map(([key, lead]) => (
                         <LeadCard
@@ -731,16 +710,18 @@ function Batch24() {
               )}
 
               {/* Web Development */}
-              {Object.entries(team25).filter(([key]) =>
-                key.includes("Web Development")
+              {Object.entries(sanityTeam).filter(([key]) =>
+                positionMatches(key, ["web development"])
               ).length > 0 && (
                 <div className="inline-block">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
                     Web Development
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
-                      .filter(([key]) => key.includes("Web Development"))
+                    {Object.entries(sanityTeam)
+                      .filter(([key]) =>
+                        positionMatches(key, ["web development"])
+                      )
                       .map(([key, lead]) => (
                         <LeadCard
                           key={key}
@@ -755,14 +736,14 @@ function Batch24() {
               )}
 
               {/* Finance */}
-              {Object.entries(team25).filter(([key]) => key.includes("Finance"))
+              {Object.entries(sanityTeam).filter(([key]) => key.includes("Finance"))
                 .length > 0 && (
                 <div className="inline-block items-bottom">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
                     Finance
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(([key]) => key.includes("Finance"))
                       .map(([key, lead]) => (
                         <LeadCard
@@ -781,7 +762,7 @@ function Batch24() {
             {/* Second Row: Event Management, Social Media & Content, Marketing & Sponsorship */}
             <div className="flex flex-col md:scale-110 md:py-10 lg:scale-100 lg:flex-row justify-evenly items-center lg:items-end">
               {/* Event Management */}
-              {Object.entries(team25).filter(([key]) =>
+              {Object.entries(sanityTeam).filter(([key]) =>
                 key.includes("Event Management")
               ).length > 0 && (
                 <div className="inline-block items-bottom">
@@ -789,7 +770,7 @@ function Batch24() {
                     Event Management
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(([key]) => key.includes("Event Management"))
                       .map(([key, lead]) => (
                         <LeadCard
@@ -805,7 +786,7 @@ function Batch24() {
               )}
 
               {/* Social Media & Content */}
-              {Object.entries(team25).filter(
+              {Object.entries(sanityTeam).filter(
                 ([key]) =>
                   key.includes("Social Media") || key.includes("SocialMedia")
               ).length > 0 && (
@@ -814,7 +795,7 @@ function Batch24() {
                     Social Media & Content
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(
                         ([key]) =>
                           key.includes("Social Media") ||
@@ -834,21 +815,27 @@ function Batch24() {
               )}
 
               {/* Marketing & Sponsorship */}
-              {Object.entries(team25).filter(
+              {Object.entries(sanityTeam).filter(
                 ([key]) =>
-                  key.includes("Marketing & Sponsorship") ||
-                  key.includes("Outreach & Sponsorship")
+                  positionMatches(key, [
+                    "outreach",
+                    "marketing and sponsorship",
+                    "outreach and sponsorship",
+                  ])
               ).length > 0 && (
                 <div className="inline-block items-bottom">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
-                    Sponsorship & Marketing
+                    Outreach
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(
                         ([key]) =>
-                          key.includes("Marketing & Sponsorship") ||
-                          key.includes("Outreach & Sponsorship")
+                          positionMatches(key, [
+                            "outreach",
+                            "marketing and sponsorship",
+                            "outreach and sponsorship",
+                          ])
                       )
                       .map(([key, lead]) => (
                         <LeadCard
@@ -864,17 +851,17 @@ function Batch24() {
               )}
             </div>
 
-            {/* Third Row: Design and Projects (centered) */}
+            {/* Third Row: Design, Projects, Projects & Web Dev */}
             <div className="flex flex-col md:scale-110 md:py-10 lg:scale-100 lg:flex-row justify-center items-center lg:items-end">
               {/* Design */}
-              {Object.entries(team25).filter(([key]) => key.includes("Design"))
+              {Object.entries(sanityTeam).filter(([key]) => key.includes("Design"))
                 .length > 0 && (
                 <div className="inline-block items-bottom mx-4">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
                     Design
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
+                    {Object.entries(sanityTeam)
                       .filter(([key]) => key.includes("Design"))
                       .map(([key, lead]) => (
                         <LeadCard
@@ -890,16 +877,16 @@ function Batch24() {
               )}
 
               {/* Projects */}
-              {Object.entries(team25).filter(([key]) =>
-                key.includes("Projects")
+              {Object.entries(sanityTeam).filter(([key]) =>
+                positionMatches(key, ["projects"])
               ).length > 0 && (
                 <div className="inline-block items-bottom mx-4">
                   <h3 className="text-24 text-center font-bold text-gray-700 py-2">
                     Projects
                   </h3>
                   <div className="flex flex-wrap justify-center">
-                    {Object.entries(team25)
-                      .filter(([key]) => key.includes("Projects"))
+                    {Object.entries(sanityTeam)
+                      .filter(([key]) => positionMatches(key, ["projects"]))
                       .map(([key, lead]) => (
                         <LeadCard
                           key={key}
@@ -912,6 +899,33 @@ function Batch24() {
                   </div>
                 </div>
               )}
+
+              {/* Projects & Web Dev */}
+              {Object.entries(sanityTeam).filter(([key]) =>
+                positionMatches(key, ["projects and web dev"])
+              ).length > 0 && (
+                <div className="inline-block items-bottom mx-4">
+                  <h3 className="text-24 text-center font-bold text-gray-700 py-2">
+                    Projects & Web Dev
+                  </h3>
+                  <div className="flex flex-wrap justify-center">
+                    {Object.entries(sanityTeam)
+                      .filter(([key]) =>
+                        positionMatches(key, ["projects and web dev"])
+                      )
+                      .map(([key, lead]) => (
+                        <LeadCard
+                          key={key}
+                          name={lead.name}
+                          image={lead.image}
+                          hashCode={lead.hash}
+                          link={lead.linkedIn}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
+
             </div>
           </>
         ) : (
