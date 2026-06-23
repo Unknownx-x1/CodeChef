@@ -23,11 +23,11 @@ import ReactGA from "react-ga4";
 import Projects from "../Components/JoinUs/Projects";
 
 const DepartmentKeyMap = {
-  competitive_programming: "Competitive Programming",
+  competitive_programming: "Technical(CP)",
   design: "Design",
   finance: "Finance",
   management: "Event Management",
-  marketing_and_outreach: "Sponsorship & Marketing",
+  marketing_and_outreach: "Outreach",
   projects: "Projects",
   social_media_and_content: "Social Media & Content",
   web_development: "Web Development",
