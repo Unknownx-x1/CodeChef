@@ -114,7 +114,7 @@ export default function BlogDetailPage() {
               <div className="w-20 h-1 bg-[#FEFED7] mt-3" />
             </div>
 
-            <article className="text-white font-cera text-xl md:text-[32px] md:leading-[45px] tracking-wide font-light max-w-[1280px] mx-auto mt-8 mb-16 whitespace-pre-line select-text text-justify">
+            <article className="text-white font-cera text-base md:text-2xl leading-relaxed md:leading-[38px] tracking-wide font-light max-w-[1280px] mx-auto mt-8 mb-16 whitespace-pre-line select-text text-justify">
               {blog.content}
             </article>
 
