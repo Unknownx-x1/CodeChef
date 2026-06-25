@@ -82,7 +82,7 @@ export default function BlogsPage() {
                 key={i}
                 className="font-bebas text-white text-3xl md:text-4xl mx-8 tracking-widest"
               >
-                LATEST CONTEST &nbsp; ✦
+                LATEST BLOGS &nbsp; ✦
               </span>
             ))}
           </div>
