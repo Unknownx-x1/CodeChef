@@ -7,7 +7,7 @@ export default function Footer() {
   const socialLinks = [
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/company/codechef-vit-chennai-chapter",
+      href: "https://linkedin.com/company/codechef-vit-chennai-chapter",
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg
           viewBox="0 0 24 24"
@@ -26,7 +26,7 @@ export default function Footer() {
     },
     {
       name: "Instagram",
-      href: "https://www.instagram.com/codechef.vitc",
+      href: "https://instagram.com/codechef.vitc",
       icon: (props: React.SVGProps<SVGSVGElement>) => (
         <svg
           viewBox="0 0 24 24"
