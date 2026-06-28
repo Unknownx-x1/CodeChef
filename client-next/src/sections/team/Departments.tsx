@@ -176,6 +176,17 @@ export default function Departments() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    if (activeDept) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeDept]);
+
   return (
     <section className="relative min-h-screen max-w-[1466px] w-[90%] mx-auto py-12">
       {/* Title */}
@@ -266,7 +277,7 @@ export default function Departments() {
       {/* Popup Modal for Members */}
       <AnimatePresence>
         {activeDept && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

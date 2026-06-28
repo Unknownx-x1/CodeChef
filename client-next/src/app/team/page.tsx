@@ -231,7 +231,7 @@ export default function TeamPage() {
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full relative z-10 min-h-[400px]">
+      <div className="w-full relative z-20 min-h-[400px]">
         <AnimatePresence mode="wait">
           {activeTab === "board" ? (
             <motion.div 
