@@ -146,6 +146,10 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
+textarea {
+  resize: vertical;
+  overflow-x: hidden;
+}
 
 @keyframes marqueeScroll {
   from {
