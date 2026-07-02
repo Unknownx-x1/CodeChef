@@ -153,13 +153,11 @@ export default function HookPage() {
           <motion.div
             initial={{
               y: -500,
-              x: -46,
               opacity: 0,
               rotate: -15,
             }}
             animate={{
-              y: -132,
-              x: -46,
+              y: -120,
               opacity: 1,
               rotate: 0,
             }}
