@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { client, urlFor } from "@/lib/sanityClient";
 import { ExternalLink, ChevronLeft, ChevronRight, Code2, Users, Loader2, Info, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -179,8 +179,8 @@ export default function ProjectsPage() {
   const [projects, setProjects] = useState<SanityProject[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const [cardWidth, setCardWidth] = useState(520);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -198,7 +198,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const query = `*[_type == "projects"] {
+        const query = `*[_type == "projects"] | order(_createdAt desc) {
           _id,
           projectName,
           description,
@@ -230,19 +230,68 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const handleNext = () => {
-    if (projects.length > 1) {
-      setDirection(1);
-      setActiveProjectIndex((prev) => (prev + 1) % projects.length);
+  const scrollToIndex = (index: number) => {
+    if (!containerRef.current) return;
+    const children = containerRef.current.children;
+    if (children && children[index]) {
+      // Temporarily disable scroll snapping to prevent browser physics conflicts
+      containerRef.current.style.scrollSnapType = "none";
+      
+      children[index].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center"
+      });
+      
+      setActiveProjectIndex(index);
+      
+      // Restore scroll snapping after the smooth scroll completes (~350ms)
+      setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.style.scrollSnapType = "x mandatory";
+        }
+      }, 350);
     }
   };
 
-  const handlePrev = () => {
-    if (projects.length > 1) {
-      setDirection(-1);
-      setActiveProjectIndex((prev) => (prev - 1 + projects.length) % projects.length);
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+    const scrollLeft = containerRef.current.scrollLeft;
+    const itemWidth = cardWidth + 24;
+    const index = Math.round(scrollLeft / itemWidth);
+    if (index !== activeProjectIndex && index >= 0 && index < projects.length) {
+      setActiveProjectIndex(index);
     }
   };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (loading || projects.length <= 1) return;
+      if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "TEXTAREA") return;
+      
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        const nextIdx = Math.max(0, activeProjectIndex - 1);
+        scrollToIndex(nextIdx);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        const nextIdx = Math.min(projects.length - 1, activeProjectIndex + 1);
+        scrollToIndex(nextIdx);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeProjectIndex, projects, loading, cardWidth]);
+
+  // Keep scroll aligned on card width changes (resizing)
+  useEffect(() => {
+    if (containerRef.current) {
+      const itemWidth = cardWidth + 24;
+      containerRef.current.scrollLeft = activeProjectIndex * itemWidth;
+    }
+  }, [cardWidth]);
 
   return (
     <main className="w-full h-screen bg-[#F5F0D8] relative flex flex-col justify-between items-center pt-2 pb-5 md:pt-3 md:pb-6 overflow-hidden select-none">
@@ -296,6 +345,14 @@ export default function ProjectsPage() {
         </svg>
       </div>
 
+      {/* Radial Mask to fade out the grid dots directly behind the carousel */}
+      <div 
+        className="fixed inset-0 z-[1] pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at center, rgba(245, 240, 216, 1) 0%, rgba(245, 240, 216, 0.95) 20%, rgba(245, 240, 216, 0) 70%)",
+        }}
+      />
+
       {/* Title & Subtitle Section (Fixed at top) */}
       <div className="relative flex flex-col items-center z-10 shrink-0 -mt-2 md:-mt-4">
         <div className="relative">
@@ -342,20 +399,29 @@ export default function ProjectsPage() {
 
       {/* Projects Snapped Viewport Center Section */}
       <div className="w-full max-w-7xl px-4 flex flex-col items-center justify-center gap-4 z-10 flex-grow min-h-0 py-4">
-        <div 
-          style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
-          className="flex-1 w-full min-h-[620px] md:min-h-[680px] flex items-center justify-center overflow-hidden relative z-10 py-4"
-        >
-          {loading ? (
-            <ProjectCardSkeleton width={cardWidth} />
-          ) : (
-            <motion.div
-              animate={{ x: - (activeProjectIndex * (cardWidth + 24) + cardWidth / 2) }}
-              transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-              style={{ transformStyle: "preserve-3d" }}
-              className="absolute left-1/2 flex gap-6 items-center"
-            >
-              {projects.map((project, idx) => {
+        <div className="relative w-full flex-1 flex items-center justify-center min-h-[620px] md:min-h-[680px]">
+          
+          {/* Scrollable Viewport */}
+          <div 
+            ref={containerRef}
+            onScroll={handleScroll}
+            style={{ 
+              perspective: "1200px", 
+              transformStyle: "preserve-3d",
+              paddingLeft: `calc(50vw - ${cardWidth / 2}px)`,
+              paddingRight: `calc(50vw - ${cardWidth / 2}px)`,
+            }}
+            className="flex-1 w-full h-full flex items-center overflow-x-auto snap-x snap-mandatory scrollbar-none z-10 py-4 gap-6"
+          >
+            {loading ? (
+              <div
+                style={{ width: `${cardWidth}px` }}
+                className="shrink-0 snap-center flex items-center justify-center py-4"
+              >
+                <ProjectCardSkeleton />
+              </div>
+            ) : (
+              projects.map((project, idx) => {
                 const isActive = idx === activeProjectIndex;
                 const isLeft = idx < activeProjectIndex;
                 const isRight = idx > activeProjectIndex;
@@ -365,70 +431,67 @@ export default function ProjectsPage() {
                 if (isRight) rotateY = -8;
 
                 return (
-                  <motion.div
+                  <div
                     key={project._id}
-                    animate={{
-                      scale: isActive ? 1.0 : 0.93,
-                      rotateY: rotateY,
-                      z: isActive ? 20 : -40,
-                    }}
-                    transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
-                    style={{ 
-                      width: `${cardWidth}px`,
-                      transformStyle: "preserve-3d",
-                      backfaceVisibility: "hidden",
-                      WebkitBackfaceVisibility: "hidden",
-                      WebkitMaskImage: "-webkit-radial-gradient(white, black)",
-                      borderRadius: "24px",
-                      overflow: "hidden",
-                    }}
-                    className={`shrink-0 ${isActive ? "z-20" : "z-10"}`}
+                    style={{ width: `${cardWidth}px`, transformStyle: "preserve-3d" }}
+                    className="shrink-0 snap-center flex items-center justify-center py-4"
                   >
-                    <ProjectCard project={project} isActive={isActive} />
-                  </motion.div>
+                    <motion.div
+                      animate={{
+                        scale: isActive ? 1.0 : 0.93,
+                        rotateY: rotateY,
+                        z: isActive ? 20 : -40,
+                      }}
+                      transition={{ type: "tween", duration: 0.3, ease: "easeInOut" }}
+                      style={{ 
+                        width: "100%",
+                        transformStyle: "preserve-3d",
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        WebkitMaskImage: "-webkit-radial-gradient(white, black)",
+                        borderRadius: "18px",
+                        overflow: "hidden",
+                      }}
+                      className={`relative ${isActive ? "z-20" : "z-10"}`}
+                    >
+                      <ProjectCard project={project} isActive={isActive} />
+                    </motion.div>
+                  </div>
                 );
-              })}
-            </motion.div>
+              })
+            )}
+          </div>
+
+          {/* Absolute Edge Navigation Buttons (Desktop/Tablet view) */}
+          {!loading && projects.length > 1 && (
+            <>
+              <button
+                onClick={() => scrollToIndex(Math.max(0, activeProjectIndex - 1))}
+                disabled={activeProjectIndex === 0}
+                className="hidden md:flex absolute -left-14 md:-left-28 lg:-left-32 xl:-left-36 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
+                aria-label="Previous Project"
+              >
+                <ChevronLeft className="w-6 h-6 stroke-[3]" />
+              </button>
+
+              <button
+                onClick={() => scrollToIndex(Math.min(projects.length - 1, activeProjectIndex + 1))}
+                disabled={activeProjectIndex === projects.length - 1}
+                className="hidden md:flex absolute -right-14 md:-right-28 lg:-right-32 xl:-right-36 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
+                aria-label="Next Project"
+              >
+                <ChevronRight className="w-6 h-6 stroke-[3]" />
+              </button>
+            </>
           )}
         </div>
 
-        {/* Bottom Centered Navigation Dock */}
+        {/* Bottom Centered Navigation Dock - Minimal Capsule counter */}
         {!loading && projects.length > 1 && (
-          <div className="flex items-center justify-center gap-4 bg-black border-2 border-black rounded-2xl p-2.5 shadow-[4px_4px_0px_rgba(0,0,0,1)] shrink-0 select-none mt-2 z-20 relative">
-            <button 
-              onClick={handlePrev}
-              className="bg-white border-2 border-black p-1.5 rounded-xl hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer text-black"
-              aria-label="Previous Project"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            
-            <div className="flex gap-2 font-mono font-bold text-xs text-white items-center">
-              {projects.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setDirection(idx > activeProjectIndex ? 1 : -1);
-                    setActiveProjectIndex(idx);
-                  }}
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center transition-all cursor-pointer ${
-                    idx === activeProjectIndex 
-                      ? "bg-[#06B6D4] text-black border border-black font-extrabold" 
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-
-            <button 
-              onClick={handleNext}
-              className="bg-white border-2 border-black p-1.5 rounded-xl hover:bg-black hover:text-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all shadow-[2px_2px_0px_rgba(0,0,0,1)] cursor-pointer text-black"
-              aria-label="Next Project"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="flex items-center justify-center bg-black border border-white/10 rounded-full px-6 py-2.5 shadow-[2px_2px_0px_rgba(0,0,0,1)] shrink-0 select-none mt-2 z-20 relative text-white">
+            <span className="font-sans font-extrabold text-sm tracking-widest uppercase">
+              {activeProjectIndex + 1} / {projects.length}
+            </span>
           </div>
         )}
       </div>
@@ -451,6 +514,13 @@ export default function ProjectsPage() {
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(255, 255, 255, 0.4);
+        }
+        .scrollbar-none::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-none {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}} />
     </main>
@@ -500,7 +570,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
         WebkitBackfaceVisibility: "hidden",
         willChange: "transform"
       }}
-      className={`relative bg-[#0B0B0B] border border-white/8 rounded-[24px] flex flex-col p-6 w-full gap-4 overflow-hidden group transition-all duration-[250ms] ease-out ${
+      className={`relative bg-[#0B0B0B] border border-white/8 rounded-[18px] flex flex-col p-6 w-full gap-4 overflow-hidden group transition-all duration-[250ms] ease-out ${
         isActive 
           ? "shadow-[0_12px_40px_rgba(0,0,0,0.55)] hover:shadow-[0_16px_50px_rgba(0,0,0,0.7)] hover:-translate-y-1" 
           : "shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
@@ -533,6 +603,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
                   <img
                     src={activeMedia.asset?.url || (activeMedia ? urlFor(activeMedia).url() : "")}
                     alt={project.projectName}
+                    style={{ imageRendering: "-webkit-optimize-contrast" }}
                     className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-[250ms] ease-out"
                   />
                 )}
@@ -582,54 +653,9 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
           
           {/* Project Name Wrapper (Fixed height to keep headers aligned consistently) */}
           <div className="h-[76px] flex items-center justify-center shrink-0 w-full px-2">
-            <h2 className="font-teko text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-wider leading-none line-clamp-2">
+            <h2 className="font-teko text-3xl sm:text-4xl font-extrabold text-white uppercase tracking-wider leading-none line-clamp-2 antialiased">
               {project.projectName}
             </h2>
-          </div>
-          
-          {/* Team Section with Fixed Height & Scrollbar to guarantee vertical alignment */}
-          <div className="flex flex-col gap-2.5 w-full h-[120px] overflow-y-auto custom-scrollbar shrink-0 justify-start items-center">
-            
-            {/* Team Leads Badges */}
-            {leads.length > 0 && (
-              <div className="flex flex-col items-center gap-1 shrink-0">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-500/95">
-                  Team Leads
-                </span>
-                <div className="flex flex-wrap justify-center gap-2">
-                  {leads.map((lead, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-amber-950/20 border border-amber-500/50 rounded-full text-xs md:text-[13px] font-extrabold text-amber-200 shadow-[0_0_6px_rgba(245,158,11,0.15)]"
-                    >
-                      <ChefHatIcon className="w-4 h-4 text-amber-400 stroke-[2]" />
-                      {lead}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Team Members Badges */}
-            {members.length > 0 && (
-              <div className="flex flex-col items-center gap-1 shrink-0">
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-400/95">
-                  Team Members
-                </span>
-                <div className="flex flex-wrap justify-center gap-1.5">
-                  {members.map((member, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1 bg-blue-950/15 border border-blue-500/55 rounded-full text-[11px] md:text-xs font-semibold text-white"
-                    >
-                      <UserIcon className="w-3.5 h-3.5 text-blue-400" />
-                      {member}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
           </div>
 
           {/* Tech Stack Chips (Optional) */}
@@ -647,7 +673,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
           )}
 
           {/* Action Buttons Stack */}
-          <div className="flex flex-col gap-2.5 w-full mt-auto pt-3 shrink-0">
+          <div className="flex flex-col gap-2.5 w-full mt-auto pt-2 shrink-0">
             
             {/* Row 1: GitHub & Demo Buttons */}
             <div className="flex items-center gap-3 w-full">
@@ -656,9 +682,9 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
                   href={project.repoLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white border border-black text-black font-extrabold rounded-xl hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.65)] hover:border-[#06B6D4] active:translate-y-0 transition-all duration-[250ms] ease-out text-xs shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-white border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.65)] hover:border-[#06B6D4] active:translate-y-0 transition-all duration-[250ms] ease-out text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
                 >
-                  <GithubIcon className="w-3.5 h-3.5 stroke-[2]" />
+                  <GithubIcon className="w-[18px] h-[18px] stroke-[2]" />
                   GitHub
                 </a>
               )}
@@ -667,9 +693,9 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
                   href={project.deployedLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[#06B6D4] border border-black text-black font-extrabold rounded-xl hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:translate-y-0 transition-all duration-[250ms] ease-out text-xs shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-[#06B6D4] border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:translate-y-0 transition-all duration-[250ms] ease-out text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ExternalLink className="w-[18px] h-[18px]" />
                   Demo
                 </a>
               )}
@@ -678,9 +704,9 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
             {/* Row 2: Read Description Full Width Button */}
             <button
               onClick={() => setShowDescription(true)}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-transparent border border-white/20 text-white/70 font-extrabold rounded-xl hover:bg-white/10 hover:text-white transition-all duration-[250ms] ease-out text-xs select-none cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-transparent border border-white/40 text-white font-bold rounded-[14px] hover:bg-white/10 transition-all duration-[250ms] ease-out text-[13px] select-none cursor-pointer"
             >
-              <Info className="w-4 h-4 text-[#06B6D4]" />
+              <Info className="w-[18px] h-[18px] text-[#06B6D4]" />
               Read Description
             </button>
             
@@ -713,7 +739,52 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
                 </button>
               </div>
               <div className="overflow-y-auto pr-1 custom-scrollbar text-sm text-white/90 leading-relaxed font-medium">
-                {project.description || "No description provided."}
+                <div>{project.description || "No description provided."}</div>
+                
+                {/* Team Details Relocated Inside Description Drawer */}
+                {(leads.length > 0 || members.length > 0) && (
+                  <div className="border-t border-white/10 mt-5 pt-4 flex flex-col gap-4 text-left">
+                    {/* Team Leads */}
+                    {leads.length > 0 && (
+                      <div className="flex flex-col gap-2">
+                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-amber-500/95">
+                          Team Leads
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {leads.map((lead, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-950/30 border border-amber-500/40 rounded-full text-xs font-bold text-amber-200"
+                            >
+                              <ChefHatIcon className="w-3.5 h-3.5 text-amber-400" />
+                              {lead}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Team Members */}
+                    {members.length > 0 && (
+                      <div className="flex flex-col gap-2">
+                        <span className="text-[10px] font-extrabold uppercase tracking-widest text-blue-400/95">
+                          Team Members
+                        </span>
+                        <div className="flex flex-wrap gap-2">
+                          {members.map((member, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-950/20 border border-blue-500/45 rounded-full text-[11px] font-semibold text-white"
+                            >
+                              <UserIcon className="w-3 h-3 text-blue-400" />
+                              {member}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
             
