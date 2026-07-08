@@ -37,8 +37,8 @@ const Medal = ({ rank, name, stars, rating }: MedalProps) => {
   const shadowClass = "shadow-[0_12px_28px_rgba(0,0,0,0.22),_inset_0_2px_4px_rgba(255,255,255,0.65)]";
 
   const sizeClass = rank === 1 
-    ? "w-[240px] h-[240px] md:w-[280px] md:h-[280px]" 
-    : "w-[200px] h-[200px] md:w-[240px] md:h-[240px]";
+    ? "w-[220px] h-[220px] sm:w-[240px] sm:h-[240px] md:w-[280px] md:h-[280px]" 
+    : "w-[190px] h-[190px] sm:w-[200px] sm:h-[200px] md:w-[240px] md:h-[240px]";
 
   const avatarSize = rank === 1 
     ? "w-20 h-20 md:w-24 md:h-24" 
@@ -173,7 +173,7 @@ const BeamDust = ({ count }: { count: number }) => {
 // Component 1: LeaderboardHeader containing the top navigation links and the page heading.
 function LeaderboardHeader() {
   return (
-    <header className="w-full max-w-6xl mx-auto px-6 pt-10 md:pt-14 flex flex-col gap-4 md:gap-5 z-10 relative">
+    <header className="w-full max-w-6xl mx-auto px-4 sm:px-6 pt-10 md:pt-14 flex flex-col gap-4 md:gap-5 z-10 relative">
 
       {/* Centered Hero Title with Premium Accent */}
       <div className="flex flex-col items-center justify-center w-full">
@@ -183,20 +183,20 @@ function LeaderboardHeader() {
           <svg viewBox="0 0 24 24" fill="currentColor" className="w-7 h-7 text-[#F6D062] drop-shadow-[0_0_8px_rgba(246,208,98,0.5)]">
             <path d="M12 .587l3.668 7.431 8.2 1.191-5.934 5.787 1.4 8.168L12 18.896l-7.334 3.857 1.4-8.168L.132 9.209l8.2-1.191L12 .587z" />
           </svg>
-          <span className="text-xl sm:text-2xl font-bold tracking-widest">///</span>
+          <span className="text-xl sm:text-2xl font-bold tracking-widest">{"///"}</span>
         </div>
 
         <h1 
-          className="font-teko text-7xl sm:text-8xl md:text-9xl font-extrabold text-white tracking-widest uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-center"
+          className="font-teko text-[clamp(3.25rem,15vw,8rem)] font-extrabold text-white tracking-wide sm:tracking-widest uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-center"
         >
           LEADERBOARD
         </h1>
 
         {/* Small uppercase text under title */}
-        <div className="flex items-center justify-center gap-3 w-full max-w-xl mx-auto mt-1 select-none">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 w-full max-w-xl mx-auto mt-1 select-none">
           <div className="h-[2px] bg-white/20 flex-1" />
           <span className="text-yellow-400 text-sm">★</span>
-          <span className="text-white text-xs sm:text-sm font-bold tracking-[0.25em] uppercase whitespace-nowrap">
+          <span className="text-white text-[10px] sm:text-sm font-bold tracking-[0.12em] sm:tracking-[0.25em] uppercase text-center">
             Top Performers of CodeChef VIT Chennai
           </span>
           <span className="text-yellow-400 text-sm">★</span>
@@ -218,7 +218,7 @@ function PodiumSection({ topThree }: { topThree: Array<{ name: string; star: str
   };
 
   return (
-    <section className="w-full max-w-5xl mx-auto px-6 mt-16 mb-16 flex flex-col md:flex-row items-center md:items-end justify-center gap-10 md:gap-14 lg:gap-16 relative z-10">
+    <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 mt-14 md:mt-16 mb-16 flex flex-col md:flex-row items-center md:items-end justify-center gap-10 md:gap-14 lg:gap-16 relative z-10">
       {/* Rank #2 (Silver Medal) */}
       <Medal 
         rank={2} 
@@ -264,47 +264,47 @@ function LeaderboardRow({
 
   return (
     <div className="
-      flex justify-between items-center w-full rounded-lg border-2 border-black/85 px-4 sm:px-6 py-3 my-2.5 font-sans font-bold text-xs sm:text-sm transition-all duration-200 cursor-default hover:-translate-y-0.5 hover:scale-[1.002]
+      grid grid-cols-[auto_1fr_auto] sm:flex sm:justify-between items-center w-full rounded-lg border-2 border-black/85 px-3 sm:px-6 py-3 my-2.5 font-sans font-bold text-xs sm:text-sm transition-all duration-200 cursor-default hover:-translate-y-0.5 hover:scale-[1.002]
       bg-white text-black hover:bg-[#FAF8E8] shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:shadow-[4px_4px_0px_rgba(0,0,0,1)]
     ">
       {/* Rank column */}
-      <div className="w-[10%] text-left flex items-center">
+      <div className="w-auto sm:w-[10%] text-left flex items-center">
         <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-mono font-black border-2 border-black text-white ${rankColors}`}>
           {rank}
         </div>
       </div>
 
       {/* Chef column */}
-      <div className="w-[35%] text-left flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full border-2 border-black bg-[#5D708B] flex items-end justify-center overflow-hidden shadow-sm">
+      <div className="min-w-0 w-full sm:w-[35%] text-left flex items-center gap-2 sm:gap-3">
+        <div className="hidden sm:flex w-8 h-8 rounded-full border-2 border-black bg-[#5D708B] items-end justify-center overflow-hidden shadow-sm">
           <svg viewBox="0 0 100 100" className="w-full h-full text-white" fill="currentColor">
             <circle cx="50" cy="38" r="18" />
             <path d="M 15,85 C 15,62 30,55 50,55 C 70,55 85,62 85,85 Z" />
           </svg>
         </div>
-        <span className="tracking-wide uppercase truncate max-w-[120px] sm:max-w-[180px]">{name}</span>
+        <span className="tracking-wide uppercase truncate max-w-[130px] sm:max-w-[180px]">{name}</span>
       </div>
 
       {/* Current Rating column */}
-      <div className="w-[20%] flex justify-center items-center gap-1.5 font-mono text-xs sm:text-sm uppercase tracking-wide">
+      <div className="w-auto sm:w-[20%] flex justify-end sm:justify-center items-center gap-1.5 font-mono text-xs sm:text-sm uppercase tracking-wide">
         <span>{rating}</span>
-        <span className="text-red-500 animate-pulse">🔥</span>
+        <span className="text-red-500 animate-pulse hidden sm:inline">🔥</span>
       </div>
 
       {/* Problems Solved column */}
-      <div className="w-[15%] flex justify-center items-center gap-1.5 font-mono text-xs sm:text-sm tracking-wide text-neutral-700">
+      <div className="col-start-2 mt-2 sm:mt-0 w-auto sm:w-[15%] flex justify-start sm:justify-center items-center gap-1.5 font-mono text-xs sm:text-sm tracking-wide text-neutral-700">
         <span className="text-blue-700 font-bold font-sans">{"{}"}</span>
         <span>{problems}</span>
       </div>
 
       {/* Max Rating column */}
-      <div className="w-[10%] flex justify-center font-mono text-xs sm:text-sm">
+      <div className="mt-2 sm:mt-0 w-auto sm:w-[10%] flex justify-end sm:justify-center font-mono text-xs sm:text-sm">
         {maxRating}
       </div>
 
       {/* Action / View Profile column */}
-      <div className="w-[10%] flex justify-end">
-        <button className="px-3.5 py-1 rounded border-2 border-black font-sans font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] text-xs bg-[#1E3A8A] text-white hover:bg-blue-800 transition-colors">
+      <div className="col-span-3 sm:col-span-1 mt-3 sm:mt-0 w-full sm:w-[10%] flex justify-end">
+        <button className="w-full sm:w-auto px-3.5 py-1.5 sm:py-1 rounded border-2 border-black font-sans font-bold shadow-[2px_2px_0px_rgba(0,0,0,1)] text-xs bg-[#1E3A8A] text-white hover:bg-blue-800 transition-colors">
           View
         </button>
       </div>
@@ -339,16 +339,16 @@ function LeaderboardTable({ rows }: { rows: Array<{ name: string; star: string; 
   };
 
   return (
-    <section className="w-full max-w-4xl mx-auto px-6 mb-24 relative z-10">
+    <section className="w-full max-w-4xl mx-auto px-4 sm:px-6 mb-24 relative z-10">
       
       {/* 3D-styled Plaque Banner: LEADERBOARD STANDINGS */}
       <div className="
         absolute -top-6 left-1/2 -translate-x-1/2 
         bg-gradient-to-b from-[#1E40AF] via-[#1E3A8A] to-[#172554] 
-        text-[#F8FAFC] border-[3px] border-black rounded px-8 py-2.5 
-        font-bebas text-xl tracking-widest 
+        text-[#F8FAFC] border-[3px] border-black rounded px-4 sm:px-8 py-2.5 
+        font-bebas text-base sm:text-xl tracking-wider sm:tracking-widest 
         shadow-[6px_6px_0px_rgba(0,0,0,1),_inset_0_2px_0px_rgba(255,255,255,0.4),_inset_0_-2px_0px_rgba(0,0,0,0.4)]
-        flex items-center justify-center gap-3.5 z-30 select-none
+        flex items-center justify-center gap-2 sm:gap-3.5 z-30 select-none whitespace-nowrap
         border-t-[#3B82F6] border-b-[#0F172A]
       ">
         {/* Left gold rivet screw */}
@@ -367,7 +367,7 @@ function LeaderboardTable({ rows }: { rows: Array<{ name: string; star: string; 
       </div>
 
       {/* Cream Card Panel Container with enhanced 3D shadow */}
-      <div className="relative bg-[#F7F0DC] border-[3px] border-black p-4 sm:p-8 rounded-lg shadow-[12px_12px_0px_rgba(0,0,0,1)] pt-10 border-t-white/20 border-l-white/20">
+      <div className="relative bg-[#F7F0DC] border-[3px] border-black p-3 sm:p-8 rounded-lg shadow-[8px_8px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_rgba(0,0,0,1)] pt-10 border-t-white/20 border-l-white/20">
         
         {/* Metal L-Shaped Corner Brackets */}
         {/* Top-Left */}
@@ -411,7 +411,7 @@ function LeaderboardTable({ rows }: { rows: Array<{ name: string; star: string; 
         </div>
 
         {/* Table Header Row */}
-        <div className="flex justify-between items-center w-full bg-white border-2 border-black rounded-lg px-6 py-2.5 mb-4 font-sans font-bold text-xs sm:text-sm text-neutral-600 shadow-sm uppercase tracking-wider select-none">
+        <div className="hidden sm:flex justify-between items-center w-full bg-white border-2 border-black rounded-lg px-6 py-2.5 mb-4 font-sans font-bold text-xs sm:text-sm text-neutral-600 shadow-sm uppercase tracking-wider select-none">
           <span className="w-[10%] text-left">RANK</span>
           <span className="w-[35%] text-left">MEMBER</span>
           <span className="w-[20%] text-center">CURRENT RATING</span>

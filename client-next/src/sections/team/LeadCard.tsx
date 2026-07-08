@@ -40,7 +40,8 @@ export default function LeadCard({
     <div
       className={`
         relative
-        w-[210px]
+        w-[calc(100vw-3rem)]
+        max-w-[210px]
         h-[290px]
         p-5
         shadow-[8px_8px_0px_rgba(0,0,0,0.25)]

@@ -185,7 +185,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setCardWidth(window.innerWidth - 48);
+        setCardWidth(Math.min(520, window.innerWidth - 32));
       } else {
         setCardWidth(520);
       }
@@ -294,7 +294,7 @@ export default function ProjectsPage() {
   }, [cardWidth]);
 
   return (
-    <main className="w-full h-screen bg-[#F5F0D8] relative flex flex-col justify-between items-center pt-2 pb-5 md:pt-3 md:pb-6 overflow-hidden select-none">
+    <main className="w-full min-h-dvh lg:h-screen bg-[#F5F0D8] relative flex flex-col justify-between items-center pt-2 pb-24 md:pb-6 md:pt-3 overflow-x-hidden overflow-y-auto lg:overflow-hidden select-none">
       
       {/* Repeating Grid Background fixed behind */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -354,13 +354,14 @@ export default function ProjectsPage() {
       />
 
       {/* Title & Subtitle Section (Fixed at top) */}
-      <div className="relative flex flex-col items-center z-10 shrink-0 -mt-2 md:-mt-4">
+      <div className="relative flex flex-col items-center z-10 shrink-0 -mt-1 md:-mt-4 px-4 text-center">
         <div className="relative">
           {/* Main Title with Cyan Neon Glow */}
           <h1 
             className="
               font-teko 
-              text-6xl 
+              text-5xl
+              min-[360px]:text-6xl 
               sm:text-7xl 
               md:text-8xl 
               lg:text-[6.5rem] 
@@ -399,7 +400,7 @@ export default function ProjectsPage() {
 
       {/* Projects Snapped Viewport Center Section */}
       <div className="w-full max-w-7xl px-4 flex flex-col items-center justify-center gap-4 z-10 flex-grow min-h-0 py-4">
-        <div className="relative w-full flex-1 flex items-center justify-center min-h-[620px] md:min-h-[680px]">
+        <div className="relative w-full flex-1 flex items-center justify-center min-h-[560px] sm:min-h-[620px] md:min-h-[680px]">
           
           {/* Scrollable Viewport */}
           <div 
@@ -411,7 +412,7 @@ export default function ProjectsPage() {
               paddingLeft: `calc(50vw - ${cardWidth / 2}px)`,
               paddingRight: `calc(50vw - ${cardWidth / 2}px)`,
             }}
-            className="flex-1 w-full h-full flex items-center overflow-x-auto snap-x snap-mandatory scrollbar-none z-10 py-4 gap-6"
+            className="flex-1 w-full h-full flex items-center overflow-x-auto overflow-y-hidden snap-x snap-mandatory scrollbar-none z-10 py-4 gap-6"
           >
             {loading ? (
               <div
@@ -468,7 +469,7 @@ export default function ProjectsPage() {
               <button
                 onClick={() => scrollToIndex(Math.max(0, activeProjectIndex - 1))}
                 disabled={activeProjectIndex === 0}
-                className="hidden md:flex absolute -left-14 md:-left-28 lg:-left-32 xl:-left-36 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
+                className="hidden md:flex absolute left-2 lg:-left-12 xl:-left-20 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
                 aria-label="Previous Project"
               >
                 <ChevronLeft className="w-6 h-6 stroke-[3]" />
@@ -477,7 +478,7 @@ export default function ProjectsPage() {
               <button
                 onClick={() => scrollToIndex(Math.min(projects.length - 1, activeProjectIndex + 1))}
                 disabled={activeProjectIndex === projects.length - 1}
-                className="hidden md:flex absolute -right-14 md:-right-28 lg:-right-32 xl:-right-36 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
+                className="hidden md:flex absolute right-2 lg:-right-12 xl:-right-20 top-1/2 -translate-y-1/2 z-40 bg-white border-2 border-black p-3.5 rounded-2xl text-black shadow-[4px_4px_0px_rgba(0,0,0,1)] hover:bg-black hover:text-white hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] hover:border-[#06B6D4] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-30 disabled:pointer-events-none shrink-0"
                 aria-label="Next Project"
               >
                 <ChevronRight className="w-6 h-6 stroke-[3]" />
@@ -570,7 +571,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
         WebkitBackfaceVisibility: "hidden",
         willChange: "transform"
       }}
-      className={`relative bg-[#0B0B0B] border border-white/8 rounded-[18px] flex flex-col p-6 w-full gap-4 overflow-hidden group transition-all duration-[250ms] ease-out ${
+      className={`relative bg-[#0B0B0B] border border-white/8 rounded-[18px] flex flex-col p-4 sm:p-6 w-full gap-4 overflow-hidden group transition-all duration-[250ms] ease-out ${
         isActive 
           ? "shadow-[0_12px_40px_rgba(0,0,0,0.55)] hover:shadow-[0_16px_50px_rgba(0,0,0,0.7)] hover:-translate-y-1" 
           : "shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
@@ -676,13 +677,13 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
           <div className="flex flex-col gap-2.5 w-full mt-auto pt-2 shrink-0">
             
             {/* Row 1: GitHub & Demo Buttons */}
-            <div className="flex items-center gap-3 w-full">
+            <div className="flex items-center gap-2 sm:gap-3 w-full">
               {project.repoLink && (
                 <a
                   href={project.repoLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-white border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.65)] hover:border-[#06B6D4] active:translate-y-0 transition-all duration-[250ms] ease-out text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 bg-white border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.65)] hover:border-[#06B6D4] active:translate-y-0 transition-all duration-[250ms] ease-out text-xs sm:text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
                 >
                   <GithubIcon className="w-[18px] h-[18px] stroke-[2]" />
                   GitHub
@@ -693,7 +694,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
                   href={project.deployedLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 bg-[#06B6D4] border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:translate-y-0 transition-all duration-[250ms] ease-out text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2.5 bg-[#06B6D4] border border-black text-black font-bold rounded-[14px] hover:-translate-y-[2px] hover:shadow-[0_0_15px_rgba(6,182,212,0.4)] active:translate-y-0 transition-all duration-[250ms] ease-out text-xs sm:text-[13px] shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] select-none cursor-pointer"
                 >
                   <ExternalLink className="w-[18px] h-[18px]" />
                   Demo
@@ -724,7 +725,7 @@ function ProjectCard({ project, isActive }: { project: SanityProject; isActive: 
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 220 }}
-            className="absolute inset-0 bg-black/95 z-30 p-6 flex flex-col justify-between"
+            className="absolute inset-0 bg-black/95 z-30 p-4 sm:p-6 flex flex-col justify-between"
           >
             <div className="flex flex-col min-h-0">
               <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4 shrink-0">

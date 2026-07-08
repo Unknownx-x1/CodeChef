@@ -102,7 +102,7 @@ export default function Footer() {
       </div>
 
       {/* Main Content Area */}
-      <div className="w-full px-10 py-6 md:py-10">
+      <div className="w-full px-4 sm:px-6 md:px-10 py-6 md:py-10">
         <div className="flex flex-col md:flex-row md:justify-between items-center gap-10 md:gap-6">
           
           {/* Left Section: Social Icons */}
@@ -142,7 +142,7 @@ export default function Footer() {
 
           {/* Right Section: Navigation Grid */}
           <div className="w-full md:w-auto flex justify-center md:justify-end">
-            <div className="grid grid-cols-3 gap-3 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-5 w-full sm:w-auto">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
@@ -153,12 +153,12 @@ export default function Footer() {
                     font-sans 
                     font-bold 
                     text-[9px] 
-                    xs:text-[11px] 
+                    min-[360px]:text-[11px] 
                     md:text-xs 
                     tracking-widest 
                     py-2 
                     px-3 
-                    xs:px-4 
+                    min-[360px]:px-4 
                     md:px-6 
                     text-center 
                     rounded-lg 
@@ -172,7 +172,9 @@ export default function Footer() {
                     flex 
                     items-center 
                     justify-center 
-                    whitespace-nowrap
+                    whitespace-normal
+                    sm:whitespace-nowrap
+                    min-h-10
                   "
                 >
                   {item.name}
@@ -185,7 +187,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Brand Section */}
-      <div className="bg-[#0b1c3d] pt-4 md:pt-6 pb-2 overflow-hidden border-t border-black/10">
+      <div className="bg-[#0b1c3d] pt-4 md:pt-6 pb-24 lg:pb-2 overflow-hidden border-t border-black/10">
         <div className="max-w-[1600px] mx-auto px-4 relative">
           <div 
             className="
@@ -193,7 +195,7 @@ export default function Footer() {
               font-sans 
               font-black 
               text-[3rem] 
-              xs:text-[4rem] 
+              min-[360px]:text-[4rem] 
               sm:text-[5.5rem] 
               md:text-[7rem] 
               lg:text-[8.5rem] 
