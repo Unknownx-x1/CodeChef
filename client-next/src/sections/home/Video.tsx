@@ -1,4 +1,9 @@
+"use client";
+
+import {useRouter} from "next/navigation";
 export default function Video() {
+  const router = useRouter();
+
   return (
     <section className="relative w-full h-screen overflow-hidden">
 
@@ -141,7 +146,7 @@ export default function Video() {
       hover:scale-105
       transition-all
       duration-300
-    "
+    " onClick={() => router.push("/recruitment")}
   >
     Join Us →
   </button>
