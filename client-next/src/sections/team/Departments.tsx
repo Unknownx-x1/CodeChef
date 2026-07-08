@@ -188,9 +188,9 @@ export default function Departments() {
   }, [activeDept]);
 
   return (
-    <section className="relative min-h-screen max-w-[1466px] w-[90%] mx-auto py-12">
+    <section className="relative min-h-screen max-w-[1466px] w-[92%] mx-auto py-12">
       {/* Title */}
-      <h1 className="text-center text-white text-7xl sm:text-8xl md:text-9xl font-teko tracking-widest uppercase mb-16">
+      <h1 className="text-center text-white text-[clamp(3rem,15vw,8rem)] font-teko tracking-wider sm:tracking-widest uppercase mb-16">
         DEPARTMENTS
       </h1>
 
@@ -211,7 +211,7 @@ export default function Departments() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 px-0 sm:px-4">
           {departments.map((dept, index) => {
             const deptLeads = getDepartmentLeads(dept.name);
             const rotation = index % 2 === 0 ? "rotate-[-1deg]" : "rotate-[1deg]";
@@ -222,11 +222,11 @@ export default function Departments() {
                 className={`
                   relative flex flex-col
                   bg-[#F6F4D8] text-[#113B8D]
-                  p-6 md:p-8
+                  p-5 sm:p-6 md:p-8
                   border-4 border-black
-                  shadow-[8px_8px_0px_rgba(0,0,0,1)]
+                  shadow-[6px_6px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_rgba(0,0,0,1)]
                   transition-all duration-300
-                  hover:-translate-y-2.5 hover:shadow-[12px_12px_0px_rgba(0,0,0,1)] hover:rotate-0
+                  hover:-translate-y-2.5 hover:shadow-[8px_8px_0px_rgba(0,0,0,1)] sm:hover:shadow-[12px_12px_0px_rgba(0,0,0,1)] hover:rotate-0
                   ${rotation}
                 `}
               >
@@ -291,7 +291,7 @@ export default function Departments() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: "spring", duration: 0.5 }}
-              className="relative w-full max-w-xl bg-[#F6F4D8] border-4 border-black text-black p-6 md:p-8 pt-12 shadow-[12px_12px_0px_rgba(0,0,0,1)] z-10 flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-xl bg-[#F6F4D8] border-4 border-black text-black p-4 sm:p-6 md:p-8 pt-12 shadow-[8px_8px_0px_rgba(0,0,0,1)] sm:shadow-[12px_12px_0px_rgba(0,0,0,1)] z-10 flex flex-col max-h-[90vh]"
             >
               {/* Spiral Binder Ring Coil Loops at the top */}
               <div className="absolute -top-5 left-8 right-8 flex justify-between pointer-events-none z-20">
@@ -312,7 +312,7 @@ export default function Departments() {
                 <X size={18} />
               </button>
 
-              <h2 className="text-4xl sm:text-5xl font-teko uppercase tracking-widest pr-12 mb-4 border-b-4 border-black pb-2 text-[#113B8D]">
+              <h2 className="text-3xl sm:text-5xl font-teko uppercase tracking-wider sm:tracking-widest pr-12 mb-4 border-b-4 border-black pb-2 text-[#113B8D] break-words">
                 {activeDept} Members
               </h2>
 
@@ -338,7 +338,7 @@ export default function Departments() {
 
                         {/* Member Details */}
                         <div className="pl-14 flex-grow flex items-center justify-between gap-4">
-                          <span className="font-bold tracking-wide uppercase text-neutral-800 text-sm sm:text-base group-hover:text-[#113B8D] transition-colors truncate max-w-[200px] sm:max-w-[280px]">
+                          <span className="font-bold tracking-wide uppercase text-neutral-800 text-sm sm:text-base group-hover:text-[#113B8D] transition-colors truncate max-w-[130px] min-[360px]:max-w-[170px] sm:max-w-[280px]">
                             {member.name}
                           </span>
                           {member.linkedin ? (

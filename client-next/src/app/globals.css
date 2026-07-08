@@ -145,6 +145,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+html {
+  overflow-x: hidden;
 }
 textarea {
   resize: vertical;
@@ -165,4 +169,3 @@ textarea {
   width: max-content;
   animation: marqueeScroll 25s linear infinite;
 }
-

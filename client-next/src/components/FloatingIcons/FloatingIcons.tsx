@@ -12,9 +12,12 @@ export default function FloatingIcons() {
         aria-label="Go to Projects"
         className="
           fixed 
-          bottom-16 
-          left-16 
-          z-[9999] 
+          bottom-20
+          left-3
+          lg:bottom-12 
+          lg:left-2 
+          z-40
+          lg:z-[9999] 
           transition-transform 
           duration-200 
           ease-out 
@@ -26,13 +29,17 @@ export default function FloatingIcons() {
           focus-visible:ring-offset-2 
           focus-visible:ring-offset-black 
           rounded-lg
+          w-11
+          lg:w-auto
         "
       >
         <div className="flex flex-col items-center gap-2.5">
           <div 
             className="
-              w-24 
-              h-24 
+              w-11
+              h-11
+              lg:w-16 
+              lg:h-16 
               rounded-full 
               bg-black 
               flex 
@@ -44,12 +51,15 @@ export default function FloatingIcons() {
             <img
               src="/images/projects.png"
               alt="Projects"
-              className="w-14 h-14 object-contain"
+              className="w-6 h-6 lg:w-10 lg:h-10 object-contain"
             />
           </div>
           <span 
             className="
-              text-sm 
+              hidden
+              lg:block
+              text-[10px]
+              lg:text-xs 
               font-bold 
               tracking-[0.1em] 
               text-white 
@@ -69,9 +79,12 @@ export default function FloatingIcons() {
         aria-label="Go to Arena"
         className="
           fixed 
-          bottom-16 
-          right-16 
-          z-[9999] 
+          bottom-20
+          right-3
+          lg:bottom-12 
+          lg:right-2 
+          z-40
+          lg:z-[9999] 
           transition-transform 
           duration-200 
           ease-out 
@@ -83,13 +96,17 @@ export default function FloatingIcons() {
           focus-visible:ring-offset-2 
           focus-visible:ring-offset-black 
           rounded-lg
+          w-11
+          lg:w-auto
         "
       >
         <div className="flex flex-col items-center gap-2.5">
           <div 
             className="
-              w-24 
-              h-24 
+              w-11
+              h-11
+              lg:w-16 
+              lg:h-16 
               rounded-full 
               bg-black 
               flex 
@@ -101,12 +118,15 @@ export default function FloatingIcons() {
             <img
               src="/images/arena.png"
               alt="Arena"
-              className="w-14 h-14 object-contain"
+              className="w-6 h-6 lg:w-10 lg:h-10 object-contain"
             />
           </div>
           <span 
             className="
-              text-sm 
+              hidden
+              lg:block
+              text-[10px]
+              lg:text-xs 
               font-bold 
               tracking-[0.1em] 
               text-white 

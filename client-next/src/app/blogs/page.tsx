@@ -62,12 +62,12 @@ export default function BlogsPage() {
   return (
     <>
       <main className="relative min-h-screen bg-[#4A6FA5] py-20 px-4 md:px-8 overflow-hidden select-none">
-        <div className="flex flex-col items-center text-center mt-12 mb-16 relative z-10">
-          <h1 className="font-bebas text-white text-[90px] md:text-[160px] tracking-[0.05em] leading-none">
+        <div className="flex flex-col items-center text-center mt-8 md:mt-12 mb-12 md:mb-16 relative z-10">
+          <h1 className="font-bebas text-white text-[clamp(4.5rem,24vw,10rem)] tracking-[0.05em] leading-none">
             CODECHEF
           </h1>
           <h1 
-            className="font-bebas text-[70px] md:text-[130px] tracking-[0.05em] leading-none uppercase"
+            className="font-bebas text-[clamp(3.5rem,18vw,8.125rem)] tracking-[0.05em] leading-none uppercase"
             style={{ WebkitTextStroke: "2.5px #FFFFFF", color: "transparent" }}
           >
             BLOGS
@@ -75,7 +75,7 @@ export default function BlogsPage() {
         </div>
 
         {/* Tilted Marquee Banner */}
-        <div className="relative w-screen -left-4 md:-left-8 py-4 mb-24 overflow-hidden z-20 border-y-2 border-white bg-[#4A6FA5] transform -rotate-[4.8deg] scale-105">
+        <div className="relative w-[calc(100vw+2rem)] -left-4 md:w-[calc(100vw+4rem)] md:-left-8 py-4 mb-16 md:mb-24 overflow-hidden z-20 border-y-2 border-white bg-[#4A6FA5] transform -rotate-[4.8deg] scale-105">
           <div className="animate-marquee flex whitespace-nowrap">
             {Array.from({ length: 12 }).map((_, i) => (
               <span
@@ -115,7 +115,7 @@ export default function BlogsPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6 }}
-                    className="w-full relative overflow-hidden bg-black/85 border border-white/10 rounded-[40px] md:rounded-[50px] p-8 md:p-14 shadow-2xl flex flex-col justify-between min-h-[400px] md:min-h-[460px]"
+                    className="w-full relative overflow-hidden bg-black/85 border border-white/10 rounded-[28px] md:rounded-[50px] p-5 sm:p-8 md:p-14 shadow-2xl flex flex-col justify-between min-h-[400px] md:min-h-[460px]"
                     style={{
                       backgroundImage: featuredBlog.imageUrl
                         ? `linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.85)), url(${featuredBlog.imageUrl})`
@@ -134,7 +134,7 @@ export default function BlogsPage() {
                     </div>
 
                     <div className="my-6">
-                      <h2 className="font-bebas text-white text-5xl md:text-8xl tracking-wide leading-tight">
+                      <h2 className="font-bebas text-white text-4xl sm:text-5xl md:text-8xl tracking-wide leading-tight break-words">
                         {featuredBlog.title}
                       </h2>
                       <p className="mt-4 text-white/80 font-sans text-base md:text-lg max-w-3xl leading-relaxed">
@@ -142,10 +142,10 @@ export default function BlogsPage() {
                       </p>
                     </div>
 
-                    <div className="mt-8 flex justify-between items-end">
+                    <div className="mt-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
                       <button
                         onClick={() => router.push(`/blogs/${slugify(featuredBlog.title)}`)}
-                        className="group flex items-center gap-2 px-8 py-3 bg-[#FEFED7] border-2 border-[#2C2C2C] text-[#1E1E1E] font-bebas text-2xl md:text-3xl rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg"
+                        className="group flex items-center gap-2 px-7 md:px-8 py-3 bg-[#FEFED7] border-2 border-[#2C2C2C] text-[#1E1E1E] font-bebas text-2xl md:text-3xl rounded-full hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg"
                       >
                         READ
                         <ArrowUpRight className="w-6 h-6 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -163,8 +163,8 @@ export default function BlogsPage() {
               )}
 
               {/* Blogs Grid */}
-              <section className="max-w-[1466px] w-[90%] mx-auto mb-24 z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+              <section className="max-w-[1466px] w-full md:w-[90%] mx-auto mb-24 z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
                   {visibleBlogs.map((blog) => (
                     <motion.div
                       key={blog.id}
@@ -172,10 +172,10 @@ export default function BlogsPage() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5 }}
-                      className="bg-[#FEFED7] w-full max-w-[559px] h-[418px] p-6 flex flex-col justify-between border-2 border-black/10 shadow-[10px_4px_4px_rgba(0,0,0,0.25)] hover:shadow-[12px_6px_6px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300 relative text-black"
+                      className="bg-[#FEFED7] w-full max-w-[559px] min-h-[418px] p-5 sm:p-6 flex flex-col justify-between border-2 border-black/10 shadow-[10px_4px_4px_rgba(0,0,0,0.25)] hover:shadow-[12px_6px_6px_rgba(0,0,0,0.35)] hover:-translate-y-1 transition-all duration-300 relative text-black mx-auto"
                     >
                       <div>
-                        <div className="w-full max-w-[466px] h-[181px] mx-auto bg-[#D8D6D7] border-[1.5px] border-black flex items-center justify-center relative shadow-inner overflow-hidden">
+                        <div className="w-full max-w-[466px] aspect-[466/181] mx-auto bg-[#D8D6D7] border-[1.5px] border-black flex items-center justify-center relative shadow-inner overflow-hidden">
                           {blog.imageUrl ? (
                             <img
                               src={blog.imageUrl}
@@ -189,19 +189,19 @@ export default function BlogsPage() {
                           )}
                         </div>
 
-                        <div className="flex flex-col mt-4 px-4">
+                        <div className="flex flex-col mt-4 px-0 sm:px-4">
                           <div className="px-4 py-0.5 bg-[#060606] text-white text-[16px] font-bebas tracking-wider rounded-[50px] w-fit">
                             {blog.category}
                           </div>
-                          <h3 className="font-bebas text-[#000000] text-[32px] leading-[38px] tracking-wide uppercase mt-2 truncate select-text">
+                          <h3 className="font-bebas text-[#000000] text-[30px] sm:text-[32px] leading-[36px] sm:leading-[38px] tracking-wide uppercase mt-2 line-clamp-2 select-text">
                             {blog.title}
                           </h3>
-                          <p className="text-[#6F6F6F] font-bebas text-[14px] leading-[17px] mt-1 select-text">
+                          <p className="text-[#6F6F6F] font-bebas text-[14px] leading-[17px] mt-1 select-text line-clamp-3">
                             {blog.about}
                           </p>
                         </div>
                       </div>
-                      <div className="flex justify-end px-4 mb-2">
+                      <div className="flex justify-end px-0 sm:px-4 mb-2">
                         <button
                           onClick={() => router.push(`/blogs/${slugify(blog.title)}`)}
                           className="px-[18px] py-[6px] bg-[#060606] text-white font-bebas text-[16px] leading-[19px] rounded-[50px] hover:bg-[#1C1C1C] transition-all duration-300"

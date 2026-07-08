@@ -7,8 +7,6 @@ import FloatingIcons from "../FloatingIcons/FloatingIcons";
 export default function NavbarWrapper() {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   if (pathname === "/") {
     return null;
   }

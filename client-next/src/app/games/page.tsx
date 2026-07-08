@@ -52,7 +52,7 @@ export default function GamesPage() {
     setActiveIndex((prev) => (prev - 1 + 4) % 4);
   };
 
-  const offset = isMobile ? 120 : 240;
+  const offset = isMobile ? 92 : 240;
 
   const cardVariants = {
     center: {
@@ -90,7 +90,7 @@ export default function GamesPage() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-black relative flex flex-col items-center pt-10 md:pt-16 pb-12 overflow-hidden select-none">
+    <main className="w-full min-h-dvh bg-black relative flex flex-col items-center pt-10 md:pt-16 pb-28 md:pb-12 overflow-hidden select-none px-4">
       
       {/* Repeating Grid Background */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -148,10 +148,7 @@ export default function GamesPage() {
           <h1 
             className="
               font-teko 
-              text-7xl 
-              sm:text-8xl 
-              md:text-9xl 
-              lg:text-[10rem] 
+              text-[clamp(4rem,22vw,10rem)]
               font-extrabold 
               text-white 
               tracking-wider 
@@ -188,7 +185,7 @@ export default function GamesPage() {
       </div>
 
       {/* Carousel Wrapper */}
-      <div className="relative w-full max-w-[800px] h-[360px] sm:h-[480px] flex items-center justify-center mt-2 z-10">
+      <div className="relative w-full max-w-[800px] h-[330px] sm:h-[480px] flex items-center justify-center mt-2 z-10">
         {carouselItems.map((item, index) => {
           let role: "center" | "left" | "right" | "hidden" = "hidden";
           
@@ -206,7 +203,7 @@ export default function GamesPage() {
               variants={cardVariants}
               animate={role}
               initial="hidden"
-              className="absolute w-[220px] h-[300px] sm:w-[320px] sm:h-[440px] rounded-[24px] overflow-hidden border-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] cursor-pointer"
+              className="absolute w-[200px] h-[280px] min-[360px]:w-[220px] min-[360px]:h-[300px] sm:w-[320px] sm:h-[440px] rounded-[24px] overflow-hidden border-2 border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.9)] cursor-pointer"
               onClick={() => {
                 if (role === "center") {
                   router.push(`/games/${item.id}`);
