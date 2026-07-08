@@ -51,10 +51,10 @@ function LeadershipBoard() {
   };
 
   return (
-    <section className="w-full max-w-5xl mx-auto px-6 mb-24 relative z-10">
+    <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 mb-24 relative z-10">
       {/* Title */}
       <div className="flex justify-center mb-8">
-        <h2 className="font-teko text-5xl sm:text-6xl font-extrabold text-white tracking-widest uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+        <h2 className="font-teko text-4xl sm:text-6xl font-extrabold text-white tracking-wider sm:tracking-widest uppercase leading-none drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)] text-center">
           LEADERSHIP BOARD
         </h2>
       </div>
@@ -189,7 +189,7 @@ export default function TeamPage() {
   });
 
   return (
-    <main className="w-full min-h-screen bg-[#5878AF] relative flex flex-col items-center pt-8 overflow-hidden select-none">
+    <main className="w-full min-h-screen bg-[#5878AF] relative flex flex-col items-center pt-8 overflow-x-hidden select-none">
       
       {/* Dashed curved paths in the background */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" xmlns="http://www.w3.org/2000/svg">
@@ -207,10 +207,10 @@ export default function TeamPage() {
       </svg>
 
       {/* Tab Switcher Panel */}
-      <div className="flex justify-center items-center gap-6 sm:gap-12 mt-4 mb-10 z-10 relative">
+      <div className="flex justify-center items-center gap-3 sm:gap-12 mt-4 mb-10 z-10 relative px-3 w-full flex-wrap">
         <button 
           onClick={() => setActiveTab("board")}
-          className={`px-8 py-2.5 font-teko text-3xl sm:text-4xl tracking-widest uppercase rounded-lg border-2 border-black transition-all duration-300 cursor-pointer ${
+          className={`px-5 sm:px-8 py-2.5 font-teko text-3xl sm:text-4xl tracking-widest uppercase rounded-lg border-2 border-black transition-all duration-300 cursor-pointer ${
             activeTab === "board" 
               ? "bg-black text-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.4)] scale-105" 
               : "text-white border-transparent hover:border-white/10"
@@ -220,7 +220,7 @@ export default function TeamPage() {
         </button>
         <button 
           onClick={() => setActiveTab("departments")}
-          className={`px-8 py-2.5 font-teko text-3xl sm:text-4xl tracking-widest uppercase rounded-lg border-2 border-black transition-all duration-300 cursor-pointer ${
+          className={`px-5 sm:px-8 py-2.5 font-teko text-3xl sm:text-4xl tracking-widest uppercase rounded-lg border-2 border-black transition-all duration-300 cursor-pointer ${
             activeTab === "departments" 
               ? "bg-black text-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.4)] scale-105" 
               : "text-white border-transparent hover:border-white/10"

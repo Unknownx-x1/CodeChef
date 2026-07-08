@@ -98,9 +98,9 @@ export default function Board() {
   const hasTopLeads = presidents.length > 0 || vps.length > 0 || genSecs.length > 0 || coSecs.length > 0;
 
   return (
-    <section className="relative min-h-screen max-w-[1466px] w-[90%] mx-auto py-12">
+    <section className="relative min-h-screen max-w-[1466px] w-[92%] mx-auto py-12">
       {/* Title */}
-      <h1 className="text-center text-white text-7xl sm:text-8xl md:text-9xl font-teko tracking-widest uppercase mb-10">
+      <h1 className="text-center text-white text-[clamp(4rem,20vw,8rem)] font-teko tracking-wider sm:tracking-widest uppercase mb-10">
         LEADS
       </h1>
 
@@ -472,7 +472,7 @@ function WheelYearPicker({
   const activeIdx = years.indexOf(selectedYear);
 
   return (
-    <div className="relative flex flex-row items-center justify-center gap-8 w-full max-w-sm mx-auto mb-14 select-none z-20">
+    <div className="relative flex flex-row items-center justify-center gap-4 sm:gap-8 w-full max-w-sm mx-auto mb-14 select-none z-20">
       {/* Dashed vertical track on the left of the drum wheel */}
       <div className="absolute left-1/2 top-0 bottom-0 w-[2px] border-l-2 border-dashed border-white/20 -translate-y-1/2 -z-10" />
 
@@ -513,7 +513,7 @@ function WheelYearPicker({
 
       {/* The 3D Vertical Wheel Container */}
       <div 
-        className="relative flex flex-col items-center justify-center h-48 w-48 overflow-visible"
+        className="relative flex flex-col items-center justify-center h-48 w-40 sm:w-48 overflow-visible"
         style={{ perspective: "800px" }}
       >
         {years.map((year, idx) => {
@@ -548,7 +548,7 @@ function WheelYearPicker({
                 if (Math.abs(offset) <= 1) onChange(year);
               }}
               className={`
-                absolute cursor-pointer font-bebas text-xl sm:text-2xl tracking-widest uppercase px-5 py-1.5 rounded-md border-[2.5px] border-black text-center transition-colors duration-200 w-36
+                absolute cursor-pointer font-bebas text-xl sm:text-2xl tracking-widest uppercase px-4 sm:px-5 py-1.5 rounded-md border-[2.5px] border-black text-center transition-colors duration-200 w-32 sm:w-36
                 ${offset === 0
                   ? "bg-black text-white shadow-[4px_4px_0px_0px_rgba(255,255,255,0.4)] z-30 font-bold"
                   : "bg-[#F5F0D8] text-black hover:bg-[#eae3c4] shadow-[2.5px_2.5px_0px_0px_rgba(0,0,0,1)] z-10"

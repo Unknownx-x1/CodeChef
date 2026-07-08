@@ -77,7 +77,7 @@ export default function Alumni() {
   }
 
   return (
-    <section className="bg-[#5878AF] py-24 overflow-hidden">
+    <section className="bg-[#5878AF] py-16 md:py-24 overflow-hidden">
       <div className="overflow-hidden relative">
         <div
   className="
@@ -124,9 +124,11 @@ export default function Alumni() {
   className="
     relative
     bg-[#ECE9C7]
-    w-[320px]
+    w-[calc(100vw-2rem)]
+    max-w-[320px]
     h-[500px]
-    p-6
+    p-5
+    sm:p-6
     border-2 border-black/15
     shadow-[16px_16px_0px_rgba(0,0,0,0.18)]
     flex flex-col

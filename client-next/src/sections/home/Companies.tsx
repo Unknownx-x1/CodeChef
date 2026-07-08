@@ -50,7 +50,7 @@ export default function Companies() {
   });
 
   return (
-    <section className="relative py-28 px-8 overflow-hidden bg-[#5878AF]">
+    <section className="relative py-20 md:py-28 px-4 sm:px-8 overflow-hidden bg-[#5878AF]">
 
       {/* Background Text */}
       <h1
@@ -61,7 +61,7 @@ export default function Companies() {
           items-center
           justify-center
           font-bebas
-          text-[20rem]
+          text-[clamp(8rem,28vw,20rem)]
           text-white/[0.03]
           pointer-events-none
           select-none
@@ -72,7 +72,7 @@ export default function Companies() {
 
       {/* Heading */}
       <div className="text-center mb-16 relative z-10">
-        <h2 className="font-teko text-5xl sm:text-6xl text-[#ECE9C7] tracking-widest uppercase mb-4">
+        <h2 className="font-teko text-4xl sm:text-6xl text-[#ECE9C7] tracking-widest uppercase mb-4">
           OUR ALUMNI WORK AT
         </h2>
       </div>
@@ -92,8 +92,10 @@ export default function Companies() {
           grid-cols-2
           md:grid-cols-3
           lg:grid-cols-5
-          gap-10
-          px-4
+          gap-8
+          lg:gap-10
+          px-0
+          sm:px-4
         "
       >
         {companies.map((company, index) => {
@@ -152,7 +154,8 @@ export default function Companies() {
                   group
                   relative
                   w-full
-                  h-36
+                  h-32
+                  sm:h-36
                   bg-[#F6F4D8]
                   border-4 border-black
                   shadow-[6px_6px_0px_rgba(0,0,0,1)]

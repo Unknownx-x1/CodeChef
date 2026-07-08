@@ -63,12 +63,12 @@ export default function EventsPage() {
   return (
     <div className="min-h-screen bg-[#4A6FA5] text-white flex flex-col relative overflow-x-hidden">
       {/* 1. Header */}
-      <div className="flex flex-col items-center justify-center pt-24 relative select-none z-10">
-        <h1 className="text-[120px] md:text-[160px] font-normal leading-none tracking-[0.05em] text-white uppercase" style={{ fontFamily: "var(--font-bebas)" }} >
+      <div className="flex flex-col items-center justify-center pt-20 md:pt-24 px-4 relative select-none z-10 text-center">
+        <h1 className="text-[clamp(4.5rem,24vw,10rem)] font-normal leading-none tracking-[0.05em] text-white uppercase" style={{ fontFamily: "var(--font-bebas)" }} >
           CODECHEF
         </h1>
         <span
-          className="text-[80px] md:text-[110px] font-normal leading-none text-transparent uppercase"
+          className="text-[clamp(3.5rem,18vw,6.875rem)] font-normal leading-none text-transparent uppercase"
           style={{
             fontFamily: "var(--font-bebas)",
             WebkitTextStroke: "3px #FFFFFF",
@@ -79,7 +79,7 @@ export default function EventsPage() {
       </div>
 
       {/* 2. Fanning Cards Arc */}
-      <div className="py-10">
+      <div className="py-8 md:py-10">
         <div className="alumni-track gap-8 flex py-10">
           {[...eventCards, ...eventCards].map((card, index) => {
             const associatedEvent = events.length > 0 ? events[index % events.length] : null;
@@ -94,8 +94,8 @@ export default function EventsPage() {
                 <div
                   className="
                     bg-[#ECE9C7]
-                    w-53
-                    h-85
+                    w-[clamp(8.5rem,42vw,13.25rem)]
+                    h-[clamp(13.5rem,66vw,21.25rem)]
                     p-3
                     border border-black/10
                     shadow-[14px_14px_0px_rgba(0,0,0,0.18)]
@@ -142,9 +142,9 @@ export default function EventsPage() {
         <>
           {/* 3. Featured Article Banner */}
           {featuredEvent && (
-            <div className="max-w-[1466px] w-[90%] mx-auto mt-8 mb-16 z-10">
+            <div className="max-w-[1466px] w-[90%] mx-auto mt-6 md:mt-8 mb-14 md:mb-16 z-10">
               <div
-                className="w-full h-[400px] rounded-[45px] relative overflow-hidden border-4 border-black group"
+                className="w-full min-h-[360px] md:h-[400px] rounded-[24px] md:rounded-[45px] relative overflow-hidden border-4 border-black group"
                 style={{
                   boxShadow: "12px 12px 0px rgba(0, 0, 0, 1)",
                   backgroundImage: featuredEvent.imageUrl
@@ -155,7 +155,7 @@ export default function EventsPage() {
                   backgroundColor: "#102741",
                 }}
               >
-                <div className="absolute top-8 right-8 bg-[#ECE9C7] border-2 border-black rounded-[70px] px-6 py-3 flex items-center justify-center shadow-lg">
+                <div className="absolute top-4 right-4 md:top-8 md:right-8 bg-[#ECE9C7] border-2 border-black rounded-[70px] px-4 md:px-6 py-2 md:py-3 flex items-center justify-center shadow-lg">
                   <span
                     className="text-[#2C2C2C] text-sm md:text-base font-bold uppercase tracking-wider"
                     style={{ fontFamily: "var(--font-inter)" }}
@@ -164,7 +164,7 @@ export default function EventsPage() {
                   </span>
                 </div>
 
-                <div className="absolute bottom-8 left-8 md:left-12 max-w-[80%] flex flex-col items-start gap-4">
+                <div className="absolute bottom-6 md:bottom-8 left-5 md:left-12 right-5 md:right-auto md:max-w-[80%] flex flex-col items-start gap-3 md:gap-4">
                   {featuredEvent.subtitle1 && (
                     <span
                       className="text-white text-lg md:text-xl font-normal tracking-wide uppercase"
@@ -175,14 +175,14 @@ export default function EventsPage() {
                   )}
 
                   <h2
-                    className="text-white text-5xl md:text-7xl font-normal uppercase leading-tight tracking-wide"
+                    className="text-white text-4xl sm:text-5xl md:text-7xl font-normal uppercase leading-tight tracking-wide break-words"
                     style={{ fontFamily: "var(--font-bebas)" }}
                   >
                     {featuredEvent.title}
                   </h2>
                   <Link
                     href={`/events/${slugify(featuredEvent.title)}`}
-                    className="bg-[#ECE9C7] hover:bg-[#ffffe4] text-[#1E1E1E] font-bold border-2 border-black rounded-[70px] px-10 py-3 text-lg md:text-xl transition-all duration-200 active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
+                    className="bg-[#ECE9C7] hover:bg-[#ffffe4] text-[#1E1E1E] font-bold border-2 border-black rounded-[70px] px-8 md:px-10 py-3 text-base md:text-xl transition-all duration-200 active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
                     style={{ fontFamily: "var(--font-roboto)" }}
                   >
                     READ
@@ -194,7 +194,7 @@ export default function EventsPage() {
 
           {/* 4. Events Grid */}
           <div className="max-w-[1466px] w-[90%] mx-auto mb-24 z-10">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
               {events.map((event) => (
                 <Link
                   key={event._id}
@@ -202,12 +202,12 @@ export default function EventsPage() {
                   className="block no-underline"
                 >
                   <div
-                    className="bg-[#ECE9C7] border border-black/10 p-6 flex flex-col justify-between relative group hover:-translate-y-2 hover:-translate-x-1 transition-all duration-300 h-[450px] cursor-pointer"
+                    className="bg-[#ECE9C7] border border-black/10 p-5 sm:p-6 flex flex-col justify-between relative group hover:-translate-y-2 hover:-translate-x-1 transition-all duration-300 min-h-[430px] cursor-pointer"
                     style={{
                       boxShadow: "14px 14px 0px rgba(0, 0, 0, 0.18)",
                     }}
                   >
-                    <div className="w-full h-[200px] bg-[#D8D6D7] border border-black/10 relative overflow-hidden">
+                    <div className="w-full aspect-[16/10] bg-[#D8D6D7] border border-black/10 relative overflow-hidden">
                       {event.imageUrl ? (
                         <img
                           src={urlFor(event.imageUrl).width(500).auto('format').url()}

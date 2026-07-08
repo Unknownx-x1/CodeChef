@@ -39,12 +39,12 @@ export default function HookPage() {
   const chefLetters = ["C", "H", "E", "F"];
 
   return (
-    <main className="relative h-screen overflow-hidden bg-black flex items-center justify-center">
+    <main className="relative min-h-dvh overflow-hidden bg-black flex items-center justify-center px-4">
 
 
 
       {/* CODE LETTERS */}
-      <div className="flex relative z-20">
+      <div className="flex relative z-20 max-w-[92vw] items-center justify-center">
 
         {codeLetters.map((item, index) => (
           <motion.span
@@ -68,11 +68,10 @@ export default function HookPage() {
               x: [0, -5, 5, -3, 0],
             }}
             className="
-    text-[120px]
-    md:text-[200px]
-    lg:text-[260px]
+    text-[clamp(3.4rem,18vw,16.25rem)]
     font-extralight
-    tracking-[-0.1em]
+    tracking-[-0.08em]
+    sm:tracking-[-0.1em]
     text-white
     select-none
   "
@@ -129,11 +128,10 @@ export default function HookPage() {
               ease: [0.22, 1, 0.36, 1],
             }}
             className="
-              text-[120px]
-              md:text-[200px]
-              lg:text-[260px]
+              text-[clamp(3.4rem,18vw,16.25rem)]
               font-extralight
-              tracking-[-0.1em]
+              tracking-[-0.08em]
+              sm:tracking-[-0.1em]
               text-white
               select-none
             "
@@ -153,11 +151,13 @@ export default function HookPage() {
           <motion.div
             initial={{
               y: -500,
+              x: "clamp(-3.125rem, -4.5vw, -1rem)",
               opacity: 0,
               rotate: -15,
             }}
             animate={{
-              y: -120,
+              y: "clamp(-8.4rem, -11vw, -2.8rem)",
+              x: "clamp(-3.125rem, -4.5vw, -1rem)",
               opacity: 1,
               rotate: 0,
             }}
@@ -166,13 +166,14 @@ export default function HookPage() {
               stiffness: 160,
               damping: 8,
             }}
-            className="absolute z-30"
+            className="absolute z-30 w-[clamp(5.5rem,16vw,11.25rem)]"
           >
             <Image
               src="/images/hat.png"
               alt="Chef Hat"
               width={180}
               height={180}
+              className="w-full h-auto"
               priority
             />
           </motion.div>
