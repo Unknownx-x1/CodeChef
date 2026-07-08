@@ -198,7 +198,7 @@ export default function Alumni() {
       leading-7
       text-black/85
       scrollbar-thin
-      no-scrollbar::-webkit-scrollbar
+      no-scrollbar
     "
   >
     <span className="text-4xl leading-none text-black/25">
